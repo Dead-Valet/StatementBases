@@ -5,7 +5,7 @@
 class Discipline
 {
 public:
-    Discipline();
+    Discipline(QString _name, int _id);
     QString name;
 
 private:

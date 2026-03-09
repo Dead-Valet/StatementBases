@@ -13,6 +13,7 @@
 
 #include "discipline.h"
 #include "statement.h"
+#include "tableedit.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,10 +26,19 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+
     MainWindow(QWidget *parent = nullptr);
+
     ~MainWindow();
+    void EdisStatement(int id);
+    void EditDiscipline(int id);
+    void RemoveStatement();
+    void RemoveDiscipline();
 
     QTableWidget *table;
+    QWidget *stat;
+    int currentRow = -1;
+    QString mode;
 
     // Menu actions;
 
@@ -50,8 +60,14 @@ private slots:
     void addSAct();
     void findAct();
 
+    void on_workSpace_cellClicked(int row, int column);
+
+    void on_CancelAdding_clicked();
 
 private:
     Ui::MainWindow *ui;
+    void CheckAndDone();
+    bool Check(int number, QString data);
+
 };
 #endif // MAINWINDOW_H

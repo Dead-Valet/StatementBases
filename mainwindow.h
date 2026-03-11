@@ -10,8 +10,14 @@
 #include <iostream>
 #include <QString>
 #include <QList>
+#include <QScrollBar>
+#include <QFrame>
+#include <QRegularExpression>
+#include <QShortcut>
+#include <QKeySequence>
 
 #include <string.h>
+#include <regex>
 
 #include "discipline.h"
 #include "statement.h"
@@ -33,17 +39,23 @@ public:
 
     ~MainWindow();
 
-    void EditStatement(int id);
-    void EditDiscipline(int id);
-    void RemoveStatement(int id);
-    void RemoveDiscipline(int id);
+    void EditStatement(int row);
+    void EditDiscipline(int row);
+    void RemoveStatement(int row);
+    void RemoveDiscipline(int row);
 
     QTableWidget *table;
+    QTableWidget *tableDis;
+
     QWidget *stat;
     QFrame *dis;
+    QWidget *findStat;
+
     int currentRow = -1;
     int currentRowDis = -1;
     int editedId = 0;
+    int editedRow = 0;
+    int y = 0;
     QString mode;
 
     // Menu actions;
@@ -53,6 +65,9 @@ public:
     QAction *addDiscipline;
     QAction *addStatement;
     QAction *findStatement;
+    QAction *switchTable;
+
+    QShortcut *shortcut;
 
     QList<Discipline*> disciplines;
     QList<Statement*> statements;
@@ -66,6 +81,10 @@ private slots:
     void addDAct();
     void addSAct();
     void findAct();
+    void switchAct();
+
+    void lockMenu();
+    void unlockMenu();
 
     void on_workSpace_cellClicked(int row, int column);
 
@@ -87,6 +106,10 @@ private slots:
     void on_CancelAdding_2_clicked();
 
     void on_ConfirmAdding_2_clicked();
+
+    void on_ok_2_clicked();
+
+    void on_ok_clicked();
 
 private:
 

@@ -11,6 +11,8 @@
 #include <QString>
 #include <QList>
 
+#include <string.h>
+
 #include "discipline.h"
 #include "statement.h"
 #include "tableedit.h"
@@ -30,14 +32,18 @@ public:
     MainWindow(QWidget *parent = nullptr);
 
     ~MainWindow();
-    void EdisStatement(int id);
+
+    void EditStatement(int id);
     void EditDiscipline(int id);
-    void RemoveStatement();
-    void RemoveDiscipline();
+    void RemoveStatement(int id);
+    void RemoveDiscipline(int id);
 
     QTableWidget *table;
     QWidget *stat;
+    QFrame *dis;
     int currentRow = -1;
+    int currentRowDis = -1;
+    int editedId = 0;
     QString mode;
 
     // Menu actions;
@@ -48,12 +54,13 @@ public:
     QAction *addStatement;
     QAction *findStatement;
 
-    QList<Discipline> disciplines;
-    QList<Statement> statements;
-
+    QList<Discipline*> disciplines;
+    QList<Statement*> statements;
 
 private slots:
+
     void resizeEvent(QResizeEvent* event);
+
     void saveAct();
     void loadAct();
     void addDAct();
@@ -64,10 +71,28 @@ private slots:
 
     void on_CancelAdding_clicked();
 
+    void on_plainTextEdit_textChanged();
+    void on_plainTextEdit_2_textChanged();
+    void on_plainTextEdit_3_textChanged();
+    void on_plainTextEdit_4_textChanged();
+    void on_plainTextEdit_5_textChanged();
+    void on_plainTextEdit_6_textChanged();
+    void on_plainTextEdit_7_textChanged();
+    void on_plainTextEdit_8_textChanged();
+
+    void on_ConfirmAdding_clicked();
+
+    void on_plainTextEdit_9_textChanged();
+
+    void on_CancelAdding_2_clicked();
+
+    void on_ConfirmAdding_2_clicked();
+
 private:
+
     Ui::MainWindow *ui;
-    void CheckAndDone();
-    bool Check(int number, QString data);
+    bool CheckAndDone();
+    bool CheckAndDoneDis();
 
 };
 #endif // MAINWINDOW_H

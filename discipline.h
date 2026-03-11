@@ -7,9 +7,8 @@ class Discipline
 public:
     Discipline(QString _name, int _id);
     QString name;
-
-private:
     int ID;
+    ~Discipline();
 };
 
 #endif // DISCIPLINE_H

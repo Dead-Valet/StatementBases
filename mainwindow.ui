@@ -291,6 +291,9 @@
         <height>31</height>
        </rect>
       </property>
+      <property name="locale">
+       <locale language="Russian" country="Russia"/>
+      </property>
       <property name="frameShape">
        <enum>QFrame::Shape::Panel</enum>
       </property>
@@ -339,7 +342,7 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QPlainTextEdit" name="plainTextEdit_6">
+     <widget class="QPlainTextEdit" name="plainTextEdit_7">
       <property name="geometry">
        <rect>
         <x>130</x>
@@ -358,7 +361,7 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QPlainTextEdit" name="plainTextEdit_7">
+     <widget class="QPlainTextEdit" name="plainTextEdit_6">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -385,6 +388,9 @@
         <width>104</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="locale">
+       <locale language="Russian" country="Russia"/>
       </property>
       <property name="frameShape">
        <enum>QFrame::Shape::Panel</enum>
@@ -570,8 +576,110 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QFrame" name="addDisWid">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>140</y>
+      <width>391</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::Panel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Plain</enum>
+    </property>
+    <widget class="QPlainTextEdit" name="plainTextEdit_9">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>281</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::Panel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Plain</enum>
+     </property>
+     <property name="Correct" stdset="0">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_11">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Название:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_18">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>281</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Добавить дисциплину</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="ConfirmAdding_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>130</y>
+       <width>82</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Добавить</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="CancelAdding_2">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>130</y>
+       <width>82</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Отменить</string>
+     </property>
+    </widget>
+   </widget>
    <zorder>addStatWid</zorder>
    <zorder>workSpace</zorder>
+   <zorder>addDisWid</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

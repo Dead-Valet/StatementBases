@@ -1,4 +1,4 @@
 #include "discipline.h"
 
-Discipline::Discipline(QString _name,  int _id) : name(_name), ID(_id) {}
+Discipline::Discipline(int _id, QString _name) : ID(_id), name(_name) {}
 Discipline::~Discipline() {}

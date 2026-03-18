@@ -12,6 +12,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+find_package(Qt6 REQUIRED COMPONENTS Core Gui)
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -26,6 +28,15 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         discipline.h discipline.cpp
         statement.h statement.cpp
         tableedit.h tableedit.cpp
+        disciplinemanager.h
+        disfiles.h disfiles.cpp
+        statementsmanager.h
+        statfiles.h statfiles.cpp
+        statementsmanager.cpp
+        disciplinemanager.cpp
+        mainwindow.h mainwindow.cpp mainwindow.ui
+        statwindow.h statwindow.cpp statwindow.ui
+        diswindow.h diswindow.cpp diswindow.ui
 
 
     )
@@ -73,3 +84,7 @@ install(TARGETS Bases
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(Bases)
 endif()
+
+find_package(Qt6 REQUIRED COMPONENTS Sql)
+target_link_libraries(Bases PRIVATE Qt6::Sql)
+

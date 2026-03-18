@@ -5,7 +5,7 @@
 class Discipline
 {
 public:
-    Discipline(QString _name, int _id);
+    Discipline(int _id, QString _name);
     QString name;
     int ID;
     ~Discipline();

@@ -1,9 +1,9 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget *parent, QSqlDatabase db)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow), database(db)
 {
 
     ui->setupUi(this);
@@ -28,6 +28,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     sfile = new statFiles();
     dfile = new disFiles();
+
+    sbase = new sbases(this);
+    dbase = new dbases(this);
 
     // MENU BAR
 
@@ -131,10 +134,12 @@ void MainWindow::switchAct() {
 
 void MainWindow::saveAct() {
     sfile->save(filename, this);
+    dfile->save(filename, this);
 }
 
 void MainWindow::loadAct() {
     sfile->load(filename, this);
+    dfile->load(filename, this);
 }
 
 // ADDING
@@ -179,14 +184,25 @@ void MainWindow::findAct() {
         y = 0;
         table->setGeometry(0, y, this->geometry().width(), this->geometry().height());
         tableDis->setGeometry(0, y, this->geometry().width(), this->geometry().height());
-        if (findStat->findChild<QScrollBar*>("resultsViev")->value() > 0) {
-            findStat->findChild<QScrollBar*>("resultsViev")->setValue(findStat->findChild<QScrollBar*>("resultsViev")->value() - 1);
+        results.clear();
+        table->setRowCount(0);
+        table->setRowCount(100);
+        currentRow = -1;
+        foreach (Statement *i, statements) {
+            currentRow++;
+            table->setItem(currentRow, 0, new QTableWidgetItem(QString::number(i->ID)));
+            table->setItem(currentRow, 1, new QTableWidgetItem(i->discipline->name));
+            table->setItem(currentRow, 2, new QTableWidgetItem(QString::number(i->sem)));
+            table->setItem(currentRow, 3, new QTableWidgetItem(i->type));
+            table->setItem(currentRow, 4, new QTableWidgetItem(i->group));
+            table->setItem(currentRow, 5, new QTableWidgetItem(i->number));
+            table->setItem(currentRow, 6, new QTableWidgetItem(i->date));
+            table->setItem(currentRow, 7, new QTableWidgetItem(i->date2));
+            table->setItem(currentRow, 8, new QTableWidgetItem(i->owner));
         }
+        ui->findText->setPlainText(QString());
         findStat->hide();
     }
-    if (mode == "saveAs") {}
-    if (mode == "load") {}
-    if (mode == "None") {}
 }
 
 // BASE ACTIONS
@@ -210,6 +226,8 @@ void MainWindow::EditStatement(int row)
 {
     if (mode == "None") {
         lockMenu();
+        table->setEnabled(false);
+        tableDis->setEnabled(false);
         editedId = table->item(row, 0)->text().toInt();
         editedRow = row;
         statWid->show();
@@ -244,22 +262,25 @@ void MainWindow::on_ok_2_clicked()
 
 void MainWindow::on_ok_clicked()
 {
-    if ((mode != "load") && (mode != "SaveAs")) {
-        QPlainTextEdit *line = findStat->findChild<QPlainTextEdit*>("findText");
-        if (line->toPlainText().isEmpty()) {
-            return;
-        }
-        results = table->findItems(line->toPlainText().simplified(), Qt::MatchContains);
-        if (results.isEmpty()) {
-            line->setStyleSheet("background-color: rgb(255, 123, 123);");
-        }
-        else {
-            findStat->findChild<QScrollBar*>("resultsViev")->setMaximum(results.length());
-            line->setStyleSheet("background-color: rgb(123, 255, 123);");
-        }
+    QPlainTextEdit *line = ui->findText;
+    if (line->toPlainText().isEmpty()) {
+        return;
     }
-    if (mode == "saveAs") {saveAct();}
-    if (mode == "load") {loadAct();}
+    results = table->findItems(line->toPlainText().simplified(), Qt::MatchContains);
+    int i = 0;
+    while (i <= currentRow) {
+        bool flag = false;
+        for (int j = 0; j < 9; j++) {
+            if (results.contains(table->item(i, j))) {
+                i++;
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            table->removeRow(i);
+            currentRow--;}
+    }
 }
 
 void MainWindow::on_findText_textChanged()

@@ -89,7 +89,13 @@ bool StatWindow::CheckAndDone()
 
         QList<QPlainTextEdit*> data = findChildren<QPlainTextEdit*>();
 
-        QString discipline = data[0]->toPlainText().simplified();
+        Discipline *discipline;
+        foreach (Discipline *i, w->dfile->disciplines) {
+            if (i->name == data[0]->toPlainText().simplified()) {
+                discipline = i;
+                break;
+            }
+        }
         int sem = data[1]->toPlainText().toInt();
         QString type = data[2]->toPlainText().simplified();
         QString group = data[3]->toPlainText().simplified();
@@ -105,7 +111,7 @@ bool StatWindow::CheckAndDone()
 
             w->currentRow++;
             w->table->setItem(w->currentRow, 0, new QTableWidgetItem(QString::number(w->statements.last()->ID)));
-            w->table->setItem(w->currentRow, 1, new QTableWidgetItem(discipline));
+            w->table->setItem(w->currentRow, 1, new QTableWidgetItem(discipline->name));
             w->table->setItem(w->currentRow, 2, new QTableWidgetItem(QString::number(sem)));
             w->table->setItem(w->currentRow, 3, new QTableWidgetItem(type));
             w->table->setItem(w->currentRow, 4, new QTableWidgetItem(group));
@@ -120,6 +126,7 @@ bool StatWindow::CheckAndDone()
             foreach (Statement *i, w->statements) {
                 if (i->ID == w->editedId) {
 
+                    i->discipline = discipline;
                     i->sem = sem;
                     i->type = type;
                     i->group = group;
@@ -128,7 +135,7 @@ bool StatWindow::CheckAndDone()
                     i->date2 = date2;
                     i->owner = owner;
 
-                    w->table->setItem(w->editedRow, 1, new QTableWidgetItem(discipline));
+                    w->table->setItem(w->editedRow, 1, new QTableWidgetItem(discipline->name));
                     w->table->setItem(w->editedRow, 2, new QTableWidgetItem(QString::number(sem)));
                     w->table->setItem(w->editedRow, 3, new QTableWidgetItem(type));
                     w->table->setItem(w->editedRow, 4, new QTableWidgetItem(group));
@@ -350,6 +357,8 @@ void StatWindow::on_CancelAdding_clicked()
 
     mode = "None";
     w->mode = "None";
+    w->table->setEnabled(true);
+    w->tableDis->setEnabled(true);
     w->editedRow = 0;
     w->editedId = 0;
 
@@ -363,6 +372,8 @@ void StatWindow::closeEvent(QCloseEvent *event)
 {
     w->mode = "None";
     mode = "None";
+    w->table->setEnabled(true);
+    w->tableDis->setEnabled(true);
     w->editedRow = 0;
     w->editedId = 0;
     w->unlockMenu();

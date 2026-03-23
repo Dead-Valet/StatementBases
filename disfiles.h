@@ -8,11 +8,6 @@
 #include <QTextStream>
 #include <QTableWidget>
 
-
-
-
-#include "/xlsx/qtxlsx.pri"
-
 #include "mainwindow.h"
 
 class MainWindow;
@@ -22,14 +17,16 @@ class disFiles : public DisciplineManager
 public:
 
     disFiles();
+
     void getDisList(QList<Discipline*> _disciplines = QList<Discipline*>());
     void addDiscipline(int id, QString name);
     void editDiscipline(int id, QString name);
     void removeDiscipline(int id);
 
-    QList<Discipline*> load(QString filename, MainWindow *w);
+    void load(QString filename, MainWindow *w);
     void save(QString filename, MainWindow *w);
 
     QList<Discipline*> disciplines;
+
 };
 

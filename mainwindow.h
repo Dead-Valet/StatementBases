@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QSql>
+#include <QSqlDatabase>
 
 #include <QScreen>
 #include <QTableWidget>
@@ -28,6 +30,10 @@
 #include "statfiles.h"
 #include "disciplinemanager.h"
 #include "disfiles.h"
+#include "dbases.h"
+#include "sbases.h"
+
+#include "xmlsaver.h"
 
 #include "statwindow.h"
 #include "diswindow.h"
@@ -42,6 +48,9 @@ class statFiles;
 class disFiles;
 class StatWindow;
 class diswindow;
+class dbases;
+class sbases;
+class xmlSaver;
 
 class MainWindow : public QMainWindow
 {
@@ -49,9 +58,11 @@ class MainWindow : public QMainWindow
 
 public:
 
+    QSqlDatabase database;
+
     StatWindow *statWid;
     diswindow *disWid;
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr, QSqlDatabase db = QSqlDatabase());
 
     ~MainWindow();
 
@@ -95,6 +106,9 @@ public:
     statFiles *sfile;
     disFiles *dfile;
     QString filename = "testStorage.txt";
+
+    dbases *dbase;
+    sbases *sbase;
 
 public slots:
 

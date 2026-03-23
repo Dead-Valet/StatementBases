@@ -41,6 +41,15 @@ void diswindow::RemoveDiscipline(int row) {
     foreach (Discipline *i, w->disciplines) {
         if (i->ID == w->editedId) {
 
+            foreach (Statement *j, w->sfile->statements) {
+                if (j->discipline->ID == i->ID) {
+                    QMessageBox ms;
+                    ms.setWindowTitle(QString());
+                    ms.setText("Невозможно удалить, есть ведомости, содеражащие эту дисциплину");
+                    ms.exec();
+                    return;
+                }
+            }
             w->disciplines.remove(w->disciplines.indexOf(i));
             w->tableDis->removeRow(row);
             w->currentRowDis--;
@@ -173,6 +182,8 @@ void diswindow::closeEvent(QCloseEvent *event)
 {
     w->mode = "None";
     mode = "None";
+    w->table->setEnabled(true);
+    w->tableDis->setEnabled(true);
     w->editedRow = 0;
     w->editedId = 0;
     w->unlockMenu();

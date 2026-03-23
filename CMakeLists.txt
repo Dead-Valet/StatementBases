@@ -12,8 +12,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui)
-
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -37,7 +35,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         mainwindow.h mainwindow.cpp mainwindow.ui
         statwindow.h statwindow.cpp statwindow.ui
         diswindow.h diswindow.cpp diswindow.ui
-
+        dbases.h dbases.cpp
+        sbases.h sbases.cpp
+        database_window.h database_window.cpp database_window.ui
+        xmlsaver.h xmlsaver.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
@@ -87,4 +88,3 @@ endif()
 
 find_package(Qt6 REQUIRED COMPONENTS Sql)
 target_link_libraries(Bases PRIVATE Qt6::Sql)
-

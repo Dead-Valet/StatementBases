@@ -1,30 +1,25 @@
-#pragma once
-#include "statementsmanager.h"
-#include "statement.h"
-#include "discipline.h"
+#ifndef SBASES_H
+#define SBASES_H
 
-#include <QFile>
-#include <QTextStream>
-#include <QTableWidget>
+#include "statementsmanager.h"
 #include "mainwindow.h"
 
+#include <QSql>
+#include <QSqlDatabase>
+#include <QSqlQuery>
 
 class MainWindow;
 
-class statFiles : public StatementsManager
+class sbases : public StatementsManager
 {
 public:
-
-    statFiles();
-
+    sbases(MainWindow *win);
+    MainWindow *w;
+    QSqlDatabase database;
     void getStatList(QList<Statement*> _statements = QList<Statement*>());
     void addStatement(int _ID, Discipline *_discipline, int _sem, QString _type, QString _group, QString _number, QString _date, QString _date2, QString _owner);
     void editStatement(int _ID, Discipline *_discipline, int _sem, QString _type, QString _group, QString _number, QString _date, QString _date2, QString _owner);
     void removeStatement(int id);
-
-    QList<Statement*> statements;
-
-    void load(QString filename, MainWindow *w);
-    void save(QString filename, MainWindow *w);
-
 };
+
+#endif // SBASES_H

@@ -39,8 +39,6 @@ void StatWindow::on_deleteButton_clicked() {
     ms.exec();
     if (ms.clickedButton() == yes) {
         RemoveStatement(w->editedRow);
-        w->table->setEnabled(true);
-        w->tableDis->setEnabled(true);
     }
 }
 
@@ -50,6 +48,7 @@ void StatWindow::RemoveStatement(int row) {
 
             w->statements.remove(w->statements.indexOf(i));
             w->sfile->removeStatement(w->editedId);
+            w->sbase->removeStatement(w->editedId);
             w->table->removeRow(row);
             w->currentRow--;
 
@@ -66,6 +65,7 @@ void StatWindow::RemoveStatement(int row) {
 
             mode = "None";
             w->mode = "None";
+            w->unlockMenu();
             this->hide();
             return;
         }
@@ -105,9 +105,9 @@ bool StatWindow::CheckAndDone()
         QString owner = data[7]->toPlainText().simplified();
 
         if (mode == "Add") {
-            w->statements.append(new Statement(w->lS + 1, discipline, sem, type, group, number, date, date2, owner));
-            w->sfile->addStatement(w->lS + 1, discipline, sem, type, group, number, date, date2, owner);
-            w->lS++;
+            w->sbase->addStatement(0, discipline, sem, type, group, number, date, date2, owner);
+            w->statements.append(new Statement(w->sbase->statements.last()->ID, discipline, sem, type, group, number, date, date2, owner));
+            w->sfile->addStatement(w->sbase->statements.last()->ID, discipline, sem, type, group, number, date, date2, owner);
 
             w->currentRow++;
             w->table->setItem(w->currentRow, 0, new QTableWidgetItem(QString::number(w->statements.last()->ID)));
@@ -145,6 +145,7 @@ bool StatWindow::CheckAndDone()
                     w->table->setItem(w->editedRow, 8, new QTableWidgetItem(owner));
 
                     w->sfile->editStatement(w->editedId, discipline, sem, type, group, number, date, date2, owner);
+                    w->sbase->editStatement(w->editedId, discipline, sem, type, group, number, date, date2, owner);
 
                     w->editedRow = 0;
                     w->editedId = 0;

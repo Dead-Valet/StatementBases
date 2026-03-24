@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent, QSqlDatabase db)
     addStatement->connect(addStatement, &QAction::triggered, this, &MainWindow::addSAct);
     this->menuBar()->addAction(addStatement);
 
-    findStatement = new QAction("Find statement");
+    findStatement = new QAction("Find");
     findStatement->connect(findStatement, &QAction::triggered, this, &MainWindow::findAct);
     this->menuBar()->addAction(findStatement);
 
@@ -118,28 +118,48 @@ void MainWindow::unlockMenu() {
 // MENU ACTIONS
 
 void MainWindow::switchAct() {
+    y = 0;
+    table->setGeometry(0, y, this->geometry().width(), this->geometry().height());
+    tableDis->setGeometry(0, y, this->geometry().width(), this->geometry().height());
+    findStat->hide();
     if (switchTable->text() == "Disciplines") {
         table->hide();
         tableDis->show();
         switchTable->setText("Statements");
+        ui->findText->setPlainText(finddis);
+        if (!finddis.isEmpty()) {
+            y = 30;
+            table->setGeometry(0, y, this->geometry().width(), this->geometry().height());
+            tableDis->setGeometry(0, y, this->geometry().width(), this->geometry().height());
+            findStat->show();
+        }
     }
     else {
         table->show();
         tableDis->hide();
         switchTable->setText("Disciplines");
+        ui->findText->setPlainText(findstats);
+        if (!findstats.isEmpty()) {
+            y = 30;
+            table->setGeometry(0, y, this->geometry().width(), this->geometry().height());
+            tableDis->setGeometry(0, y, this->geometry().width(), this->geometry().height());
+            findStat->show();
+        }
     }
 }
 
 // SAVE/LOAD
 
 void MainWindow::saveAct() {
-    sfile->save(filename, this);
-    dfile->save(filename, this);
+    xmlSaver *s = new xmlSaver(filename, this);
+    s->save(dfile);
+    s->save(sfile);
+    delete s;
 }
 
 void MainWindow::loadAct() {
-    sfile->load(filename, this);
-    dfile->load(filename, this);
+    sfile->load("testStorage.txt", this);
+    //dfile->load(filename, this);
 }
 
 // ADDING
@@ -181,27 +201,42 @@ void MainWindow::findAct() {
         findStat->show();
     }
     else {
+        if (switchTable->text() == "Disciplines") {
+            results.clear();
+            table->setRowCount(0);
+            table->setRowCount(100);
+            currentRow = -1;
+            foreach (Statement *i, statements) {
+                currentRow++;
+                table->setItem(currentRow, 0, new QTableWidgetItem(QString::number(i->ID)));
+                table->setItem(currentRow, 1, new QTableWidgetItem(i->discipline->name));
+                table->setItem(currentRow, 2, new QTableWidgetItem(QString::number(i->sem)));
+                table->setItem(currentRow, 3, new QTableWidgetItem(i->type));
+                table->setItem(currentRow, 4, new QTableWidgetItem(i->group));
+                table->setItem(currentRow, 5, new QTableWidgetItem(i->number));
+                table->setItem(currentRow, 6, new QTableWidgetItem(i->date));
+                table->setItem(currentRow, 7, new QTableWidgetItem(i->date2));
+                table->setItem(currentRow, 8, new QTableWidgetItem(i->owner));
+            }
+            findstats = QString();
+        }
+        else {
+            results.clear();
+            tableDis->setRowCount(0);
+            tableDis->setRowCount(100);
+            currentRowDis = -1;
+            foreach (Discipline *i, disciplines) {
+                currentRowDis++;
+                tableDis->setItem(currentRowDis, 0, new QTableWidgetItem(QString::number(i->ID)));
+                tableDis->setItem(currentRowDis, 1, new QTableWidgetItem(i->name));
+            }
+            finddis = QString();
+        }
         y = 0;
         table->setGeometry(0, y, this->geometry().width(), this->geometry().height());
         tableDis->setGeometry(0, y, this->geometry().width(), this->geometry().height());
-        results.clear();
-        table->setRowCount(0);
-        table->setRowCount(100);
-        currentRow = -1;
-        foreach (Statement *i, statements) {
-            currentRow++;
-            table->setItem(currentRow, 0, new QTableWidgetItem(QString::number(i->ID)));
-            table->setItem(currentRow, 1, new QTableWidgetItem(i->discipline->name));
-            table->setItem(currentRow, 2, new QTableWidgetItem(QString::number(i->sem)));
-            table->setItem(currentRow, 3, new QTableWidgetItem(i->type));
-            table->setItem(currentRow, 4, new QTableWidgetItem(i->group));
-            table->setItem(currentRow, 5, new QTableWidgetItem(i->number));
-            table->setItem(currentRow, 6, new QTableWidgetItem(i->date));
-            table->setItem(currentRow, 7, new QTableWidgetItem(i->date2));
-            table->setItem(currentRow, 8, new QTableWidgetItem(i->owner));
-        }
-        ui->findText->setPlainText(QString());
         findStat->hide();
+        ui->findText->setPlainText(QString());
     }
 }
 
@@ -266,36 +301,49 @@ void MainWindow::on_ok_clicked()
     if (line->toPlainText().isEmpty()) {
         return;
     }
-    results = table->findItems(line->toPlainText().simplified(), Qt::MatchContains);
-    int i = 0;
-    while (i <= currentRow) {
-        bool flag = false;
-        for (int j = 0; j < 9; j++) {
-            if (results.contains(table->item(i, j))) {
-                i++;
-                flag = true;
-                break;
+    if (switchTable->text() == "Disciplines") {
+        results = table->findItems(line->toPlainText().simplified(), Qt::MatchContains);
+        int i = 0;
+        while (i <= currentRow) {
+            bool flag = false;
+            for (int j = 0; j < 9; j++) {
+                if (results.contains(table->item(i, j))) {
+                    i++;
+                    flag = true;
+                    break;
+                }
             }
+            if (!flag) {
+                table->removeRow(i);
+                currentRow--;}
         }
-        if (!flag) {
-            table->removeRow(i);
-            currentRow--;}
+    }
+    else {
+        results = tableDis->findItems(line->toPlainText().simplified(), Qt::MatchContains);
+        int i = 0;
+        while (i <= currentRowDis) {
+            bool flag = false;
+            for (int j = 0; j < 9; j++) {
+                if (results.contains(tableDis->item(i, j))) {
+                    i++;
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                tableDis->removeRow(i);
+                currentRowDis--;}
+        }
     }
 }
 
 void MainWindow::on_findText_textChanged()
 {
-    if ((mode != "load") && (mode != "SaveAs")) {
-        findStat->findChild<QPlainTextEdit*>("findText")->setStyleSheet("background-color: rgb(255, 255, 255);");
-        findStat->findChild<QScrollBar*>("resultsViev")->setMaximum(0);
-        results.clear();
-    }
+    findStat->findChild<QPlainTextEdit*>("findText")->setStyleSheet("background-color: rgb(255, 255, 255);");
+    if (switchTable->text() == "Disciplines") {findstats = ui->findText->toPlainText();}
+    if (switchTable->text() == "Statements") {finddis = ui->findText->toPlainText();}
+    results.clear();
 }
 
-void MainWindow::on_resultsViev_valueChanged(int value)
-{
-    if (results.isEmpty()) {return;}
-    int index = value - 1;
-    if (index >= 0) {table->selectRow(results[index]->row());}
-}
+void MainWindow::on_resultsViev_valueChanged(int value) {}
 

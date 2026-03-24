@@ -103,9 +103,12 @@ public:
     int lS;
     int lD;
 
+    QString findstats;
+    QString finddis;
+
     statFiles *sfile;
     disFiles *dfile;
-    QString filename = "testStorage.txt";
+    QString filename = "testStorage.xml";
 
     dbases *dbase;
     sbases *sbase;

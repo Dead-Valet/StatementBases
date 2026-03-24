@@ -29,25 +29,23 @@ void database_window::on_pushButton_clicked()
         return;
     }
 
-    next.setHostName(ui->Server->toPlainText());
-    next.setDatabaseName("testbase");
-    next.setUserName(ui->User->toPlainText());
-    next.setPassword(ui->Password->toPlainText());
-
-    if (next.open()) {
-        if (!next.tables().contains("disciplines")) {
-            QSqlQuery query;
-            QString createTableSQL = "CREATE TABLE disciplines (id SERIAL PRIMARY KEY, name VARCHAR(100) NOT NULL);";
-            query.exec(createTableSQL);
-        }
-    }
-
-    else {
+    if (!db.tables().contains("disciplines")) {
         QSqlQuery query;
-        if (query.exec("CREATE DATABASE testbase")) {
-            QString createTableSQL = "CREATE TABLE disciplines (id SERIAL PRIMARY KEY, name VARCHAR(100) NOT NULL);";
-            query.exec(createTableSQL);
-        }
+        QString createTableSQL = "CREATE TABLE disciplines (id SERIAL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL);";
+        query.exec(createTableSQL);
+    }
+    if (!db.tables().contains("statements")) {
+        QSqlQuery query;
+        QString createTableSQL = "CREATE TABLE statements ("
+                                 "id SERIAL PRIMARY KEY, "
+                                 "FOREIGN KEY (discipline) REFERENCES disciplines (name),"
+                                 "term INT,"
+                                 "group VARCHAR(100) NOT NULL,"
+                                 "number VARCHAR(100) NOT NULL,"
+                                 "date_getting Date,"
+                                 "date_passing Date,"
+                                 "who_passed VARCHAR(100) NOT NULL);";
+        if(!query.exec(createTableSQL)) {std::cout << db.lastError().text().toStdString() << std::endl;}
     }
 
     this->hide();

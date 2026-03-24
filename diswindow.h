@@ -9,6 +9,12 @@
 #include <QFrame>
 #include <QRegularExpression>
 #include <QMessageBox>
+#include <QSql>
+#include <QSqlError>
+#include <QPlainTextEdit>
+#include <iostream>
+#include <QMessageBox>
+#include <QSqlQuery>
 
 #include "discipline.h"
 #include "mainwindow.h"

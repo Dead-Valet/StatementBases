@@ -1,5 +1,6 @@
 #include "diswindow.h"
 #include "ui_diswindow.h"
+#include <QSqlResult>
 
 diswindow::diswindow(QWidget *parent, MainWindow *win)
     : QMainWindow(parent), w(win)
@@ -32,8 +33,6 @@ void diswindow::on_deleteButton_2_clicked() {
     ms.exec();
     if (ms.clickedButton() == yes) {
         RemoveDiscipline(w->editedRow);
-        w->table->setEnabled(true);
-        w->tableDis->setEnabled(true);
     }
 }
 
@@ -41,7 +40,7 @@ void diswindow::RemoveDiscipline(int row) {
     foreach (Discipline *i, w->disciplines) {
         if (i->ID == w->editedId) {
 
-            foreach (Statement *j, w->sfile->statements) {
+            foreach (Statement *j, w->sbase->statements) {
                 if (j->discipline->ID == i->ID) {
                     QMessageBox ms;
                     ms.setWindowTitle(QString());
@@ -54,6 +53,7 @@ void diswindow::RemoveDiscipline(int row) {
             w->tableDis->removeRow(row);
             w->currentRowDis--;
             w->dfile->removeDiscipline(w->editedId);
+            w->dbase->removeDiscipline(w->editedId);
 
             ui->deleteButton_2->hide();
 
@@ -63,9 +63,12 @@ void diswindow::RemoveDiscipline(int row) {
 
             w->table->setEnabled(true);
             w->tableDis->setEnabled(true);
+            w->editedId = 0;
+            w->editedRow = 0;
 
             mode = "None";
             w->mode = "None";
+            w->unlockMenu();
             this->hide();
 
             return;
@@ -86,10 +89,9 @@ bool diswindow::CheckAndDoneDis()
         {
             w->currentRowDis++;
 
-            w->disciplines.append(new Discipline(w->lD + 1, name));
-            w->dfile->addDiscipline(w->lD + 1, name);
-            w->lD ++;
-
+            w->dbase->addDiscipline(0, name);
+            w->dfile->addDiscipline(w->dbase->disciplines.last()->ID, name);
+            w->disciplines.append(new Discipline(w->dbase->disciplines.last()->ID, name));
             w->tableDis->setItem(w->currentRowDis, 0, new QTableWidgetItem(QString::number(w->disciplines.last()->ID)));
             w->tableDis->setItem(w->currentRowDis, 1, new QTableWidgetItem(name));
 
@@ -101,6 +103,7 @@ bool diswindow::CheckAndDoneDis()
 
                     i->name = name;
                     w->dfile->editDiscipline(w->editedId, name);
+                    w->dbase->editDiscipline(w->editedId, name);
                     w->tableDis->setItem(w->editedRow, 1, new QTableWidgetItem(name));
                     w->editedRow = 0;
                     w->editedId = 0;

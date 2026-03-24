@@ -6,12 +6,14 @@
 #include "mainwindow.h"
 
 class MainWindow;
+class statFiles;
+class disFiles;
 
 class xmlSaver
 {
 public:
-    xmlSaver(QString filename, MainWindow *win);
-    QString file;
+    xmlSaver(QString _filename, MainWindow *win);
+    QString filename;
     MainWindow *w;
     void save(statFiles *file);
     void save(disFiles *file);

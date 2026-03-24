@@ -22,7 +22,6 @@ class database_window : public QMainWindow
 public:
     explicit database_window(QWidget *parent = nullptr);
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
-    QSqlDatabase next;
     ~database_window();
 
 private slots:

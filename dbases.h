@@ -7,6 +7,7 @@
 #include <QSql>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSqlError>
 
 #include <iostream>
 
@@ -18,6 +19,8 @@ public:
     dbases(MainWindow *win);
     MainWindow *w;
     QSqlDatabase database;
+    int id = 0;
+    QList<Discipline*> disciplines;
     void getDisList(QList<Discipline*> _disciplines = QList<Discipline*>());
     void addDiscipline(int id, QString name);
     void editDiscipline(int id, QString name);

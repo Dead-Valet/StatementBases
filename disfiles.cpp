@@ -67,7 +67,7 @@ void disFiles::save(QString filename, MainWindow *w) {
     QTextStream out(&file);
     for (int i = 0; i <= w->currentRowDis; i++) {
         out << w->tableDis->item(i, 0)->text() << "; " << w->tableDis->item(i, 1)->text() << "\n";
-        addDiscipline( w->tableDis->item(i, 0)->text(), w->tableDis->item(i, 1)->text());
+        addDiscipline(w->tableDis->item(i, 0)->text().toInt(), w->tableDis->item(i, 1)->text());
     }
 
     QFile file2("out.txt");

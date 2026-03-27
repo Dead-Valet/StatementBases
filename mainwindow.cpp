@@ -26,11 +26,13 @@ MainWindow::MainWindow(QWidget *parent, QSqlDatabase db)
     findStat->setGeometry(0, 0, findStat->geometry().width(), findStat->geometry().height());
     findStat->hide();
 
-    sfile = new statFiles();
     dfile = new disFiles();
+    sfile = new statFiles();
 
     sbase = new sbases(this);
     dbase = new dbases(this);
+    dbase->getDisList();
+    sbase->getStatList();
 
     // MENU BAR
 
@@ -88,7 +90,6 @@ MainWindow::MainWindow(QWidget *parent, QSqlDatabase db)
             lD = 0;
         }
     }
-
 }
 
 MainWindow::~MainWindow()
@@ -151,10 +152,11 @@ void MainWindow::switchAct() {
 // SAVE/LOAD
 
 void MainWindow::saveAct() {
-    xmlSaver *s = new xmlSaver(filename, this);
-    s->save(dfile);
-    s->save(sfile);
-    delete s;
+    filename = QFileDialog::getOpenFileName();
+    xmlSaver *saver = new xmlSaver(filename, this);
+    if (switchTable->text() == "Disciplines") {saver->save(sfile);}
+    if (switchTable->text() == "Statements") {saver->save(dfile);}
+    delete saver;
 }
 
 void MainWindow::loadAct() {
@@ -297,17 +299,13 @@ void MainWindow::on_ok_2_clicked()
 
 void MainWindow::on_ok_clicked()
 {
-    QPlainTextEdit *line = ui->findText;
-    if (line->toPlainText().isEmpty()) {
-        return;
-    }
     if (switchTable->text() == "Disciplines") {
-        results = table->findItems(line->toPlainText().simplified(), Qt::MatchContains);
+        findstats = ui->findText->toPlainText();
         int i = 0;
         while (i <= currentRow) {
             bool flag = false;
-            for (int j = 0; j < 9; j++) {
-                if (results.contains(table->item(i, j))) {
+            foreach (Statement *j, sbase->statements) {
+                if (sbase->line(j).contains(findstats)) {
                     i++;
                     flag = true;
                     break;
@@ -315,16 +313,17 @@ void MainWindow::on_ok_clicked()
             }
             if (!flag) {
                 table->removeRow(i);
-                currentRow--;}
-        }
+                currentRow--;
+            }
+       }
     }
     else {
-        results = tableDis->findItems(line->toPlainText().simplified(), Qt::MatchContains);
+        finddis = ui->findText->toPlainText();
         int i = 0;
         while (i <= currentRowDis) {
             bool flag = false;
-            for (int j = 0; j < 9; j++) {
-                if (results.contains(tableDis->item(i, j))) {
+            foreach (Discipline *j, dbase->disciplines) {
+                if (dbase->line(j).contains(finddis)) {
                     i++;
                     flag = true;
                     break;
@@ -342,7 +341,6 @@ void MainWindow::on_findText_textChanged()
     findStat->findChild<QPlainTextEdit*>("findText")->setStyleSheet("background-color: rgb(255, 255, 255);");
     if (switchTable->text() == "Disciplines") {findstats = ui->findText->toPlainText();}
     if (switchTable->text() == "Statements") {finddis = ui->findText->toPlainText();}
-    results.clear();
 }
 
 void MainWindow::on_resultsViev_valueChanged(int value) {}

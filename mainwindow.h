@@ -19,9 +19,10 @@
 #include <QSlider>
 #include <QFile>
 #include <QTextStream>
-
 #include <string.h>
 #include <regex>
+#include <QFileDialog>
+#include <QStandardPaths>
 
 #include "discipline.h"
 #include "statement.h"
@@ -108,7 +109,7 @@ public:
 
     statFiles *sfile;
     disFiles *dfile;
-    QString filename = "testStorage.xml";
+    QString filename = "testStorage.txt";
 
     dbases *dbase;
     sbases *sbase;

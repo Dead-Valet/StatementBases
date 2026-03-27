@@ -25,6 +25,7 @@ public:
     void addDiscipline(int id, QString name);
     void editDiscipline(int id, QString name);
     void removeDiscipline(int id);
+    QString line(Discipline *dis);
 };
 
 #endif // DBASES_H

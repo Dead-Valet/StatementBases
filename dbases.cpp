@@ -16,3 +16,6 @@ void dbases::addDiscipline(int id, QString name) {
 }
 void dbases::editDiscipline(int id, QString name) {}
 void dbases::removeDiscipline(int id) {}
+QString dbases::line(Discipline *dis) {
+    return QString("Test");
+};

@@ -58,9 +58,9 @@ void statFiles::load(QString filename, MainWindow *w) {
     while (!in.atEnd()) {
         QString line = in.readLine();
         QList<QString> i = line.split("; ");
-        foreach (Discipline *d, w->disciplines) {
+        foreach (Discipline *d, w->dbase->disciplines) {
             if (d->name == i[1]) {
-                statements.append(new Statement(i[0].toInt(), d, i[2].toInt(), i[3], i[4], i[5], i[6], i[7], i[8].replace(QRegularExpression(","), ";")));
+                addStatement(i[0].toInt(), d, i[2].toInt(), i[3], i[4], i[5], i[6], i[7], i[8].replace(QRegularExpression(","), ";"));
                 w->statements.append(new Statement(i[0].toInt(), d, i[2].toInt(), i[3], i[4], i[5], i[6], i[7], i[8].replace(QRegularExpression(","), ";")));
                 w->currentRow++;
                 for (int j = 0; j < 9; j++) {

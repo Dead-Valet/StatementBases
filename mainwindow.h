@@ -38,6 +38,7 @@
 
 #include "statwindow.h"
 #include "diswindow.h"
+#include "database_window.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -52,6 +53,7 @@ class diswindow;
 class dbases;
 class sbases;
 class xmlSaver;
+class database_window;
 
 class MainWindow : public QMainWindow
 {
@@ -63,7 +65,7 @@ public:
 
     StatWindow *statWid;
     diswindow *disWid;
-    MainWindow(QWidget *parent = nullptr, QSqlDatabase db = QSqlDatabase());
+    MainWindow(QWidget *parent = nullptr, database_window *db = nullptr);
 
     ~MainWindow();
 
@@ -109,7 +111,7 @@ public:
 
     statFiles *sfile;
     disFiles *dfile;
-    QString filename = "testStorage.txt";
+    QString filename = "testStorage.xml";
 
     dbases *dbase;
     sbases *sbase;

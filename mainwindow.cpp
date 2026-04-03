@@ -1,9 +1,9 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent, QSqlDatabase db)
+MainWindow::MainWindow(QWidget *parent, database_window *db)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow), database(db)
+    , ui(new Ui::MainWindow), database(db->db)
 {
 
     ui->setupUi(this);
@@ -31,7 +31,12 @@ MainWindow::MainWindow(QWidget *parent, QSqlDatabase db)
 
     sbase = new sbases(this);
     dbase = new dbases(this);
-    dbase->getDisList();
+    connect(db, &database_window::OPENED, this, [this]() {
+        dbase->getDisList();
+    });
+
+    //connect(db, &database_window::OPENED, dbase, &dbases::getDisList());
+    //dbase->getDisList();
     sbase->getStatList();
 
     // MENU BAR

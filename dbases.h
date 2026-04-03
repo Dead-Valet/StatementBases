@@ -20,12 +20,15 @@ public:
     MainWindow *w;
     QSqlDatabase database;
     int id = 0;
+    QString _name;
     QList<Discipline*> disciplines;
-    void getDisList(QList<Discipline*> _disciplines = QList<Discipline*>());
     void addDiscipline(int id, QString name);
     void editDiscipline(int id, QString name);
     void removeDiscipline(int id);
     QString line(Discipline *dis);
+
+public slots:
+    void getDisList(QList<Discipline*> _disciplines = QList<Discipline*>());
 };
 
 #endif // DBASES_H

@@ -90,7 +90,7 @@ bool StatWindow::CheckAndDone()
         QList<QPlainTextEdit*> data = findChildren<QPlainTextEdit*>();
 
         Discipline *discipline;
-        foreach (Discipline *i, w->dfile->disciplines) {
+        foreach (Discipline *i, w->dbase->disciplines) {
             if (i->name == data[0]->toPlainText().simplified()) {
                 discipline = i;
                 break;
@@ -184,8 +184,8 @@ void StatWindow::on_ConfirmAdding_clicked()
 void StatWindow::on_plainTextEdit_textChanged()
 {
     if (QRegularExpression("^(\\s)*[А-ЯЁ]([а-яА-ЯёЁ])+(\\s+(([а-яА-ЯёЁ])+|\\d+))*(\\s)*$").match(ui->plainTextEdit->toPlainText()).hasMatch()) {
-        foreach (Discipline *i, w->disciplines) {
-            if (i->name == ui->plainTextEdit->toPlainText().simplified() && (i->ID != w->editedId)) {
+        foreach (Discipline *i, w->dbase->disciplines) {
+            if (i->name == ui->plainTextEdit->toPlainText().simplified() && ((i->ID != w->editedId) || (i->ID == 0))) {
                 ui->plainTextEdit->setProperty("Correct", true);
                 ui->plainTextEdit->setStyleSheet("background-color: rgb(255, 255, 255);");
                 return;
@@ -378,5 +378,10 @@ void StatWindow::closeEvent(QCloseEvent *event)
     w->editedRow = 0;
     w->editedId = 0;
     w->unlockMenu();
+
+    foreach (QPlainTextEdit *i, this->findChildren<QPlainTextEdit*>()) {
+        i->clear();
+        i->setStyleSheet("background-color: rgb(255, 255, 255);");
+    }
 }
 

@@ -8,15 +8,6 @@ void xmlSaver::save(disFiles *file) {
     if (!f.open(QIODevice::QIODevice::WriteOnly  | QIODevice::Text)) {return;}
     QTextStream out(&f);
     out << "<table/>";
-    out << "    <tr/>";
-    out << "        <td>id</td><td>название</td>";
-    out << "    </tr>";
-    /*
-     * out << "    <tableColumns count=\"2\">";
-    out << "        <tableColumn id=\"1\" name=\"id\">";
-    out << "        <tableColumn id=\"2\" name=\"name\">";
-    out << "    </tableColumns>";
-    */
     foreach (Discipline *i, file->disciplines) {
         out << "    <tr/>";
         out << "        <td>" << QString::number(i->ID) << "</td><td>" << i->name << "</td>";

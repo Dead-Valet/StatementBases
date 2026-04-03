@@ -16,9 +16,11 @@ void diswindow::switchText(QString text, bool hided) {
     ui->label_18->setText(text);
     if (hided) {
         ui->deleteButton_2->hide();
+        ui->ConfirmAdding_2->setText("Добавить");
     }
     else {
         ui->deleteButton_2->show();
+        ui->ConfirmAdding_2->setText("Сохранить");
         ui->plainTextEdit_9->setPlainText(w->tableDis->item(w->editedRow, 1)->text());
     }
 }
@@ -164,7 +166,7 @@ void diswindow::on_plainTextEdit_9_textChanged()
     }
 
     if (QRegularExpression("^(\\s)*[А-ЯЁ]([а-яА-ЯёЁ])+(\\s+(([а-яА-ЯёЁ])+|\\d+))*(\\s)*$").match(data).hasMatch()) {
-        foreach (Discipline *i, w->disciplines) {
+        foreach (Discipline *i, w->dbase->disciplines) {
             if (i->name == data.simplified() && (i->ID != w->editedId)) {
                 ui->plainTextEdit_9->setProperty("Correct", false);
                 ui->plainTextEdit_9->setStyleSheet("background-color: rgb(255, 123, 123);");
@@ -190,5 +192,8 @@ void diswindow::closeEvent(QCloseEvent *event)
     w->editedRow = 0;
     w->editedId = 0;
     w->unlockMenu();
+    ui->plainTextEdit_9->clear();
+    ui->plainTextEdit_9->setStyleSheet("background-color: rgb(255, 255, 255);");
+
 }
 

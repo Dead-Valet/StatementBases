@@ -31,13 +31,14 @@ MainWindow::MainWindow(QWidget *parent, database_window *db)
 
     sbase = new sbases(this);
     dbase = new dbases(this);
+
     connect(db, &database_window::OPENED, this, [this]() {
         dbase->getDisList();
     });
 
-    //connect(db, &database_window::OPENED, dbase, &dbases::getDisList());
-    //dbase->getDisList();
-    sbase->getStatList();
+    connect(db, &database_window::OPENED,this, [this]() {
+        sbase->getStatList();
+    });
 
     // MENU BAR
 
@@ -138,6 +139,7 @@ void MainWindow::switchAct() {
             table->setGeometry(0, y, this->geometry().width(), this->geometry().height());
             tableDis->setGeometry(0, y, this->geometry().width(), this->geometry().height());
             findStat->show();
+            on_ok_clicked();
         }
     }
     else {
@@ -150,6 +152,7 @@ void MainWindow::switchAct() {
             table->setGeometry(0, y, this->geometry().width(), this->geometry().height());
             tableDis->setGeometry(0, y, this->geometry().width(), this->geometry().height());
             findStat->show();
+            on_ok_clicked();
         }
     }
 }
@@ -209,7 +212,6 @@ void MainWindow::findAct() {
     }
     else {
         if (switchTable->text() == "Disciplines") {
-            results.clear();
             table->setRowCount(0);
             table->setRowCount(100);
             currentRow = -1;
@@ -228,7 +230,6 @@ void MainWindow::findAct() {
             findstats = QString();
         }
         else {
-            results.clear();
             tableDis->setRowCount(0);
             tableDis->setRowCount(100);
             currentRowDis = -1;
@@ -307,36 +308,36 @@ void MainWindow::on_ok_clicked()
     if (switchTable->text() == "Disciplines") {
         findstats = ui->findText->toPlainText();
         int i = 0;
-        while (i <= currentRow) {
-            bool flag = false;
-            foreach (Statement *j, sbase->statements) {
-                if (sbase->line(j).contains(findstats)) {
-                    i++;
-                    flag = true;
-                    break;
-                }
+        table->setRowCount(0);
+        table->setRowCount(100);
+        currentRow = -1;
+        foreach (Statement *i, sbase->statements) {
+            if (sbase->line(i).contains(findstats)) {
+                currentRow++;
+                table->setItem(currentRow, 0, new QTableWidgetItem(QString::number(i->ID)));
+                table->setItem(currentRow, 1, new QTableWidgetItem(i->discipline->name));
+                table->setItem(currentRow, 2, new QTableWidgetItem(QString::number(i->sem)));
+                table->setItem(currentRow, 3, new QTableWidgetItem(i->type));
+                table->setItem(currentRow, 4, new QTableWidgetItem(i->group));
+                table->setItem(currentRow, 5, new QTableWidgetItem(i->number));
+                table->setItem(currentRow, 6, new QTableWidgetItem(i->date));
+                table->setItem(currentRow, 7, new QTableWidgetItem(i->date2));
+                table->setItem(currentRow, 8, new QTableWidgetItem(i->owner));
             }
-            if (!flag) {
-                table->removeRow(i);
-                currentRow--;
-            }
-       }
+        }
     }
     else {
         finddis = ui->findText->toPlainText();
         int i = 0;
-        while (i <= currentRowDis) {
-            bool flag = false;
-            foreach (Discipline *j, dbase->disciplines) {
-                if (dbase->line(j).contains(finddis)) {
-                    i++;
-                    flag = true;
-                    break;
-                }
+        tableDis->setRowCount(0);
+        tableDis->setRowCount(100);
+        currentRowDis = -1;
+        foreach (Discipline *i, dbase->disciplines) {
+            if (dbase->line(i).contains(finddis)) {
+                currentRowDis++;
+                tableDis->setItem(currentRowDis, 0, new QTableWidgetItem(QString::number(i->ID)));
+                tableDis->setItem(currentRowDis, 1, new QTableWidgetItem(i->name));
             }
-            if (!flag) {
-                tableDis->removeRow(i);
-                currentRowDis--;}
         }
     }
 }

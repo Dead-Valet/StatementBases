@@ -85,8 +85,6 @@ public:
     int y = 0;
     QString mode = "None";
 
-    QList<QTableWidgetItem*> results;
-
     // Menu actions;
 
     QAction *save;

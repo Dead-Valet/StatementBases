@@ -79,8 +79,6 @@ void statFiles::save(QString filename, MainWindow *w) {
         return;
     }
 
-    statements.clear();
-
     QTextStream out(&file);
     out << "Ведомости\n";
     for (int i = 0; i <= w->currentRow; i++) {
@@ -92,7 +90,6 @@ void statFiles::save(QString filename, MainWindow *w) {
             }
         }
         out << w->table->item(i, 0)->text() << "; " << w->table->item(i, 1)->text() << "; " <<w->table->item(i, 2)->text() << "; " << w->table->item(i, 3)->text() << "; " << w->table->item(i, 4)->text() << "; " << w->table->item(i, 5)->text() << "; " << w->table->item(i, 6)->text() << "; " << w->table->item(i, 7)->text() << "; " << w->table->item(i, 8)->text().replace(QRegularExpression(";"), ",") << "\n";
-        addStatement(w->table->item(i, 0)->text().toInt(), dis, w->table->item(i, 2)->text().toInt(), w->table->item(i, 3)->text(), w->table->item(i, 4)->text(), w->table->item(i, 5)->text(), w->table->item(i, 6)->text(), w->table->item(i, 7)->text(),  w->table->item(i, 8)->text().replace(QRegularExpression(";"), ","));
     }
 
     QFile file2("out.txt");

@@ -100,8 +100,8 @@ bool StatWindow::CheckAndDone()
         QString type = data[2]->toPlainText().simplified();
         QString group = data[3]->toPlainText().simplified();
         QString number = data[4]->toPlainText().simplified();
-        QString date = data[6]->toPlainText().simplified();;
-        QString date2 = data[5]->toPlainText().simplified();;
+        QString date = data[6]->toPlainText().simplified();
+        QString date2 = data[5]->toPlainText().simplified();
         QString owner = data[7]->toPlainText().simplified();
 
         if (mode == "Add") {
@@ -110,7 +110,7 @@ bool StatWindow::CheckAndDone()
             w->sfile->addStatement(w->sbase->statements.last()->ID, discipline, sem, type, group, number, date, date2, owner);
 
             w->currentRow++;
-            w->table->setItem(w->currentRow, 0, new QTableWidgetItem(QString::number(w->statements.last()->ID)));
+            w->table->setItem(w->currentRow, 0, new QTableWidgetItem(QString::number(w->sbase->statements.last()->ID)));
             w->table->setItem(w->currentRow, 1, new QTableWidgetItem(discipline->name));
             w->table->setItem(w->currentRow, 2, new QTableWidgetItem(QString::number(sem)));
             w->table->setItem(w->currentRow, 3, new QTableWidgetItem(type));

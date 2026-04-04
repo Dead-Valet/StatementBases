@@ -52,5 +52,5 @@ void dbases::removeDiscipline(int id) {
 }
 
 QString dbases::line(Discipline *dis) {
-    return QString(dis->ID + dis->name);
+    return QString(QString::number(dis->ID) + dis->name);
 }

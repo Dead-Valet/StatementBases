@@ -26,51 +26,35 @@ void database_window::on_pushButton_clicked()
         ms.setWindowTitle(QString());
         ms.setText(db.lastError().text());
         ms.exec();
-        return this->on_pushButton_clicked();
-
-        if (!db.tables().contains("disciplines")) {
-            QSqlQuery query;
-            QString createTableSQL = "CREATE TABLE disciplines (id SERIAL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL);";
-            query.exec(createTableSQL);
-        }
-        if (!db.tables().contains("statements")) {
-            QSqlQuery query;
-            QString createTableSQL = "CREATE TABLE statements ("
-                                     "id SERIAL PRIMARY KEY, "
-                                     "FOREIGN KEY (discipline) REFERENCES disciplines (name),"
-                                     "term INT,"
-                                     "type INT,"
-                                     "group VARCHAR(100) NOT NULL,"
-                                     "number VARCHAR(100) NOT NULL,"
-                                     "date_getting Date,"
-                                     "date_passing Date,"
-                                     "who_passed VARCHAR(100) NOT NULL);";
-            if(!query.exec(createTableSQL)) {std::cout << db.lastError().text().toStdString() << std::endl;}
-        }
-
-        OPENED();
-
         return;
+
     }
 
     if (!db.tables().contains("disciplines")) {
         QSqlQuery query;
-        QString createTableSQL = "CREATE TABLE disciplines (id SERIAL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL);";
-        query.exec(createTableSQL);
+        QString createTableSQL = "CREATE TABLE disciplines (id SERIAL PRIMARY KEY, name VARCHAR(100) NOT NULL UNIQUE);";
+        if(!query.exec(createTableSQL)) {
+            std::cout << "Error creating disciplines: " << query.lastError().text().toStdString() << std::endl;
+        }
     }
+
     if (!db.tables().contains("statements")) {
         QSqlQuery query;
         QString createTableSQL = "CREATE TABLE statements ("
                                  "id SERIAL PRIMARY KEY, "
-                                 "FOREIGN KEY (discipline) REFERENCES disciplines (name),"
+                                 "discipline VARCHAR(100) NOT NULL,"
                                  "term INT,"
-                                 "type INT,"
-                                 "group VARCHAR(100) NOT NULL,"
+                                 "type VARCHAR(100) NOT NULL,"
+                                 "group_ VARCHAR(100) NOT NULL,"
                                  "number VARCHAR(100) NOT NULL,"
-                                 "date_getting Date,"
-                                 "date_passing Date,"
-                                 "who_passed VARCHAR(100) NOT NULL);";
-        if(!query.exec(createTableSQL)) {}
+                                 "date_getting VARCHAR(100) NOT NULL,"
+                                 "date_passing VARCHAR(100) NOT NULL,"
+                                 "who_passed VARCHAR(100) NOT NULL,"
+                                 "FOREIGN KEY (discipline) REFERENCES disciplines (name) ON DELETE CASCADE);";
+
+        if(!query.exec(createTableSQL)) {
+            std::cout << query.lastError().text().toStdString() << std::endl;
+        }
     }
 
     OPENED();

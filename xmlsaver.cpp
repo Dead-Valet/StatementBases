@@ -49,3 +49,22 @@ void xmlSaver::save(statFiles *file) {
     out << "</table>";
     f.close();
 }
+
+void xmlSaver::load(statFiles *file) {
+    QFile f(filename);
+    if (!f.open(QIODevice::QIODevice::ReadOnly  | QIODevice::Text)) {return;}
+    QTextStream in(&f);
+    QString needs;
+}
+
+void xmlSaver::load(disFiles *file) {
+    QFile f(filename);
+    if (!f.open(QIODevice::QIODevice::ReadOnly  | QIODevice::Text)) {return;}
+    QTextStream in(&f);
+    while (!in.atEnd()) {
+        QString str = in.readLine();
+        if (str.contains("<td>")) {
+            QList<QString*> line = str.split("</td><td>");
+        }
+    }
+}

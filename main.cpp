@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     database_window *db = new database_window();
     db->show();
     MainWindow w(nullptr, db);
-    w.show();
-    w.lower();
+    QObject::connect(db, &database_window::OPENED, &w, &MainWindow::show);
+    db->raise();
     return a.exec();
 }

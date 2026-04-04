@@ -7,21 +7,49 @@ sbases::sbases(MainWindow *win) : w(win) {
 
 void sbases::getStatList(QList<Statement*> _statements) {
 
+    QSqlQuery query;
+    if (!query.exec("SELECT id, discipline, term, type, group_, number, date_getting, date_passing, who_passed FROM statements;")) {
+        std::cout << "loh" << std::endl;}
+
+    while (query.next()) {
+
+        int _ID = query.value(0).toInt();
+
+        QString name = query.value(1).toString();
+        Discipline *_discipline;
+        foreach (Discipline *i, w->dbase->disciplines) {
+            if (i->name == name) {
+                _discipline = i;
+                break;
+            }
+        }
+
+        int _sem = query.value(2).toInt();
+        QString _type = query.value(3).toString();
+        QString _group = query.value(4).toString();
+        QString _number = query.value(5).toString();
+        QString _date = query.value(6).toString();
+        QString _date2 = query.value(7).toString();
+        QString _owner = query.value(8).toString();
+
+        statements.append(new Statement(_ID, _discipline, _sem, _type, _group, _number, _date, _date2, _owner));
+    }
+
 }
 
 void sbases::addStatement(int _ID, Discipline *_discipline, int _sem, QString _type, QString _group, QString _number, QString _date, QString _date2, QString _owner) {
 
 
     QSqlQuery query;
-    query.prepare("INSERT INTO statements (discipline, term, type, group, number, date_getting, date_passing, who_passed) VALUES (:discipline, :term, :type, :group, :number, :date_getting, :date_passing, :who_passed)");
+    query.prepare("INSERT INTO statements (discipline, term, type, group_, number, date_getting, date_passing, who_passed) VALUES (:discipline, :term, :type, :group_, :number, :date_getting, :date_passing, :who_passed)");
     query.bindValue(":discipline", _discipline->name);
     query.bindValue(":term", _sem);
     query.bindValue(":type", _type);
-    query.bindValue(":group", _group);
+    query.bindValue(":group_", _group);
     query.bindValue(":number", _number);
-    query.bindValue(":date_passing", _date);
-    query.bindValue(":date_passed", _date2);
-    query.bindValue(":owner", _owner);
+    query.bindValue(":date_getting", _date);
+    query.bindValue(":date_passing", _date2);
+    query.bindValue(":who_passed", _owner);
 
     if (query.exec()) {
         id = query.lastInsertId().toInt();
@@ -32,11 +60,37 @@ void sbases::addStatement(int _ID, Discipline *_discipline, int _sem, QString _t
 }
 void sbases::editStatement(int _ID, Discipline *_discipline, int _sem, QString _type, QString _group, QString _number, QString _date, QString _date2, QString _owner) {
 
+    QSqlQuery query;
+    query.prepare("UPDATE statements SET discipline = :discipline, term = :term, type = :type, group_ = :group_, number = :number, date_getting = :date_getting, date_passing = :date_passing, who_passed = :who_passed WHERE id = :id");
+    query.bindValue(":discipline", _discipline->name);
+    query.bindValue(":term", _sem);
+    query.bindValue(":type", _type);
+    query.bindValue(":group_", _group);
+    query.bindValue(":number", _number);
+    query.bindValue(":date_getting", _date);
+    query.bindValue(":date_passing", _date2);
+    query.bindValue(":who_passed", _owner);
+    query.bindValue(":id", _ID);
+
+    if(!query.exec()) {
+        std::cout << query.lastError().text().toStdString() << std::endl;
+    }
+
 }
 void sbases::removeStatement(int id) {
+
+        QSqlQuery query;
+        query.prepare("DELETE FROM statements  WHERE id = :id");
+        query.bindValue(":id", id);
+        query.exec();
+        foreach (Statement *i, statements) {
+            if (i->ID == id) {
+                statements.remove(statements.indexOf(i));
+            }
+        }
 
 }
 
 QString sbases::line(Statement *stat) {
-    return QString("Test");
+    return QString(QString::number(stat->ID) + stat->discipline->name + QString::number(stat->sem) + stat->type + stat->group + stat->number + stat->date + stat->date2 + stat->owner);
 }

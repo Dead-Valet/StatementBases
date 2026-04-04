@@ -151,22 +151,20 @@
      <string>Server</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="Password">
+   <widget class="QLineEdit" name="Password">
     <property name="geometry">
      <rect>
       <x>110</x>
       <y>180</y>
       <width>151</width>
-      <height>20</height>
+      <height>21</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
+    <property name="frame">
+     <bool>true</bool>
     </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+    <property name="echoMode">
+     <enum>QLineEdit::EchoMode::Password</enum>
     </property>
    </widget>
   </widget>

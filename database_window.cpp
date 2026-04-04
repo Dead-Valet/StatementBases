@@ -19,7 +19,7 @@ void database_window::on_pushButton_clicked()
     db.setHostName(ui->Server->toPlainText());
     db.setDatabaseName(ui->Name->toPlainText());
     db.setUserName(ui->User->toPlainText());
-    db.setPassword(ui->Password->toPlainText());
+    db.setPassword(ui->Password->text());
 
     if (!db.open()) {
         QMessageBox ms;

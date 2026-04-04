@@ -109,6 +109,7 @@ void sbases::loadAll() {
         w->table->setItem(w->currentRow, 7, new QTableWidgetItem(i->date2));
         w->table->setItem(w->currentRow, 8, new QTableWidgetItem(i->owner));
         w->sfile->addStatement(i->ID, i->discipline, i->sem, i->type, i->group, i->number, i->date, i->date2, i->owner);
+        w->statements.append(new Statement(i->ID, i->discipline, i->sem, i->type, i->group, i->number, i->date, i->date2, i->owner));
     }
 }
 

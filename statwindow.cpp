@@ -14,9 +14,11 @@ void StatWindow::switchText(QString text, bool hided) {
     ui->label_9->setText(text);
     if (hided) {
         ui->deleteButton->hide();
+        ui->ConfirmAdding->setText("Добавить");
     }
     else {
         ui->deleteButton->show();
+        ui->ConfirmAdding->setText("Сохранить");
 
         ui->plainTextEdit->setPlainText(w->table->item(w->editedRow, 1)->text());
         ui->plainTextEdit_2->setPlainText(w->table->item(w->editedRow, 2)->text());
@@ -52,6 +54,7 @@ void StatWindow::RemoveStatement(int row) {
             w->table->removeRow(row);
             w->currentRow--;
 
+            this->hide();
             foreach (QPlainTextEdit *i, findChildren<QPlainTextEdit*>()) {
                 i->clear();
                 i->setProperty("Correct", false);
@@ -66,8 +69,6 @@ void StatWindow::RemoveStatement(int row) {
             mode = "None";
             w->mode = "None";
             w->unlockMenu();
-            this->hide();
-            return;
         }
     }
 }

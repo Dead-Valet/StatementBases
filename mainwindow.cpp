@@ -84,22 +84,6 @@ MainWindow::MainWindow(QWidget *parent, database_window *db)
     findShortcut = new QShortcut(QKeySequence("Ctrl+F"), this);
     connect(findShortcut, &QShortcut::activated, this, &MainWindow::findAct);
 
-    QFile file("out.txt");
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream in(&file);
-        QString line = in.readLine();
-        lS = QString(line.split(" ")[0]).toInt();
-        lD = QString(line.split(" ")[1]).toInt();
-    }
-    else {
-        QFile file2("out.txt");
-        if (file2.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream out2(&file2);
-            out2 << "0 0\n";
-            lS = 0;
-            lD = 0;
-        }
-    }
 }
 
 MainWindow::~MainWindow()
@@ -172,7 +156,8 @@ void MainWindow::saveAct() {
 }
 
 void MainWindow::loadAct() {
-    xmlSaver *saver = new xmlSaver("testStorage.xml", this);
+    filename = QFileDialog::getOpenFileName();
+    xmlSaver *saver = new xmlSaver(filename, this);
     saver->load(sfile);
     saver->load(dfile);
     delete saver;

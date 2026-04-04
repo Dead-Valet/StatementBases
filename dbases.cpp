@@ -62,6 +62,7 @@ void dbases::loadAll() {
         w->tableDis->setItem(w->currentRowDis, 1, new QTableWidgetItem(i->name));
         w->tableDis->setItem(w->currentRowDis, 0, new QTableWidgetItem(QString::number(i->ID)));
         w->dfile->addDiscipline(i->ID, i->name);
+        w->disciplines.append(new Discipline(i->ID, i->name));
     }
 }
 

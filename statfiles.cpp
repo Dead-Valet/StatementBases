@@ -42,35 +42,24 @@ void statFiles::removeStatement(int id){
 
 void statFiles::load(QString filename, MainWindow *w) {
 
-    QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return;
-    }
-
     w->table->setRowCount(0);
     w->table->setRowCount(100);
     w->currentRow = -1;
-    w->statements.clear();
-    statements.clear();
 
-    QTextStream in(&file);
-
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        QList<QString> i = line.split("; ");
-        foreach (Discipline *d, w->dbase->disciplines) {
-            if (d->name == i[1]) {
-                addStatement(i[0].toInt(), d, i[2].toInt(), i[3], i[4], i[5], i[6], i[7], i[8].replace(QRegularExpression(","), ";"));
-                w->statements.append(new Statement(i[0].toInt(), d, i[2].toInt(), i[3], i[4], i[5], i[6], i[7], i[8].replace(QRegularExpression(","), ";")));
-                w->currentRow++;
-                for (int j = 0; j < 9; j++) {
-                    w->table->setItem(w->currentRow, j, new QTableWidgetItem(i[j]));
-                }
-                break;
-            }
-        }
+    foreach (Statement *i, statements) {
+        w->currentRow++;
+        w->table->setItem(w->currentRow, 0, new QTableWidgetItem(QString::number(i->ID)));
+        w->table->setItem(w->currentRow, 1, new QTableWidgetItem(i->discipline->name));
+        w->table->setItem(w->currentRow, 2, new QTableWidgetItem(QString::number(i->sem)));
+        w->table->setItem(w->currentRow, 3, new QTableWidgetItem(i->type));
+        w->table->setItem(w->currentRow, 4, new QTableWidgetItem(i->group));
+        w->table->setItem(w->currentRow, 5, new QTableWidgetItem(i->number));
+        w->table->setItem(w->currentRow, 6, new QTableWidgetItem(i->date));
+        w->table->setItem(w->currentRow, 7, new QTableWidgetItem(i->date2));
+        w->table->setItem(w->currentRow, 8, new QTableWidgetItem(i->owner));
     }
 }
+
 
 void statFiles::save(QString filename, MainWindow *w) {
 

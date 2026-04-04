@@ -51,6 +51,20 @@ void dbases::removeDiscipline(int id) {
     }
 }
 
+void dbases::loadAll() {
+
+    w->tableDis->setRowCount(0);
+    w->tableDis->setRowCount(100);
+    w->currentRowDis = -1;
+
+    foreach (Discipline *i, disciplines) {
+        w->currentRowDis++;
+        w->tableDis->setItem(w->currentRowDis, 1, new QTableWidgetItem(i->name));
+        w->tableDis->setItem(w->currentRowDis, 0, new QTableWidgetItem(QString::number(i->ID)));
+        w->dfile->addDiscipline(i->ID, i->name);
+    }
+}
+
 QString dbases::line(Discipline *dis) {
     return QString(QString::number(dis->ID) + dis->name);
 }

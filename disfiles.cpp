@@ -33,32 +33,21 @@ void disFiles::removeDiscipline(int id) {
 
 void disFiles::load(QString filename, MainWindow *w) {
 
-    QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {return;}
-
     w->currentRowDis = -1;
     w->tableDis->setRowCount(0);
     w->tableDis->setRowCount(100);
-    w->disciplines.clear();
-    disciplines.clear();
 
-    QTextStream in(&file);
-
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        QList<QString> i = line.split("; ");
-        disciplines.append(new Discipline(i[0].toInt(), i[1]));
-        w->disciplines.append(new Discipline(i[0].toInt(), i[1]));
+    foreach (Discipline *i, disciplines) {
         w->currentRowDis++;
-        w->tableDis->setItem(w->currentRowDis, 1, new QTableWidgetItem(i[1]));
-        w->tableDis->setItem(w->currentRowDis, 0, new QTableWidgetItem(i[0]));
+        w->tableDis->setItem(w->currentRowDis, 1, new QTableWidgetItem(i->name));
+        w->tableDis->setItem(w->currentRowDis, 0, new QTableWidgetItem(QString::number(i->ID)));
     }
 
 }
 
 void disFiles::save(QString filename, MainWindow *w) {
 
-    QFile file(filename);
+    QFile file("testStorage.txt");
     if (!file.open(QIODevice::WriteOnly | QIODevice::Append)) {
         return;
     }

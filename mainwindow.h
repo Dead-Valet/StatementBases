@@ -93,6 +93,7 @@ public:
     QAction *addStatement;
     QAction *findStatement;
     QAction *switchTable;
+    QAction *loadall;
 
     QShortcut *shortcut;
     QShortcut *stateShortcut;
@@ -127,6 +128,8 @@ public slots:
 
     void lockMenu();
     void unlockMenu();
+
+    void loadAll();
 
     void on_ok_2_clicked();
     void on_ok_clicked();

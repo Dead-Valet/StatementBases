@@ -91,6 +91,27 @@ void sbases::removeStatement(int id) {
 
 }
 
+void sbases::loadAll() {
+
+    w->table->setRowCount(0);
+    w->table->setRowCount(100);
+    w->currentRow = -1;
+
+    foreach (Statement *i, statements) {
+        w->currentRow++;
+        w->table->setItem(w->currentRow, 0, new QTableWidgetItem(QString::number(i->ID)));
+        w->table->setItem(w->currentRow, 1, new QTableWidgetItem(i->discipline->name));
+        w->table->setItem(w->currentRow, 2, new QTableWidgetItem(QString::number(i->sem)));
+        w->table->setItem(w->currentRow, 3, new QTableWidgetItem(i->type));
+        w->table->setItem(w->currentRow, 4, new QTableWidgetItem(i->group));
+        w->table->setItem(w->currentRow, 5, new QTableWidgetItem(i->number));
+        w->table->setItem(w->currentRow, 6, new QTableWidgetItem(i->date));
+        w->table->setItem(w->currentRow, 7, new QTableWidgetItem(i->date2));
+        w->table->setItem(w->currentRow, 8, new QTableWidgetItem(i->owner));
+        w->sfile->addStatement(i->ID, i->discipline, i->sem, i->type, i->group, i->number, i->date, i->date2, i->owner);
+    }
+}
+
 QString sbases::line(Statement *stat) {
     return QString(QString::number(stat->ID) + stat->discipline->name + QString::number(stat->sem) + stat->type + stat->group + stat->number + stat->date + stat->date2 + stat->owner);
 }

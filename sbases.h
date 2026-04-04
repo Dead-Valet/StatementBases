@@ -21,6 +21,7 @@ public:
     void addStatement(int _ID, Discipline *_discipline, int _sem, QString _type, QString _group, QString _number, QString _date, QString _date2, QString _owner);
     void editStatement(int _ID, Discipline *_discipline, int _sem, QString _type, QString _group, QString _number, QString _date, QString _date2, QString _owner);
     void removeStatement(int id);
+    void loadAll();
     QString line(Statement *stat);
 
 public slots:

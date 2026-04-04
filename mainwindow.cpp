@@ -50,6 +50,10 @@ MainWindow::MainWindow(QWidget *parent, database_window *db)
     load->connect(load, &QAction::triggered, this, &MainWindow::loadAct);
     this->menuBar()->addAction(load);
 
+    loadall = new QAction("Load all");
+    loadall->connect(loadall, &QAction::triggered, this, &MainWindow::loadAll);
+    this->menuBar()->addAction(loadall);
+
     addDiscipline = new QAction("Add discipline");
     addDiscipline->connect(addDiscipline, &QAction::triggered, this, &MainWindow::addDAct);
     this->menuBar()->addAction(addDiscipline);
@@ -161,15 +165,22 @@ void MainWindow::switchAct() {
 
 void MainWindow::saveAct() {
     filename = QFileDialog::getOpenFileName();
-    xmlSaver *saver = new xmlSaver(filename, this);
+    xmlSaver *saver = new xmlSaver("testStorage.xml", this);
     if (switchTable->text() == "Disciplines") {saver->save(sfile);}
     if (switchTable->text() == "Statements") {saver->save(dfile);}
     delete saver;
 }
 
 void MainWindow::loadAct() {
-    sfile->load("testStorage.txt", this);
-    //dfile->load(filename, this);
+    xmlSaver *saver = new xmlSaver("testStorage.xml", this);
+    if (switchTable->text() == "Disciplines") {saver->load(sfile);}
+    if (switchTable->text() == "Statements") {saver->load(dfile);}
+    delete saver;
+}
+
+void MainWindow::loadAll() {
+    dbase->loadAll();
+    sbase->loadAll();
 }
 
 // ADDING
@@ -323,6 +334,8 @@ void MainWindow::on_ok_clicked()
                 table->setItem(currentRow, 6, new QTableWidgetItem(i->date));
                 table->setItem(currentRow, 7, new QTableWidgetItem(i->date2));
                 table->setItem(currentRow, 8, new QTableWidgetItem(i->owner));
+
+                sfile->addStatement(i->ID, i->discipline, i->sem, i->type, i->group, i->number, i->date, i->date2, i->owner);
             }
         }
     }
@@ -337,6 +350,8 @@ void MainWindow::on_ok_clicked()
                 currentRowDis++;
                 tableDis->setItem(currentRowDis, 0, new QTableWidgetItem(QString::number(i->ID)));
                 tableDis->setItem(currentRowDis, 1, new QTableWidgetItem(i->name));
+
+                dfile->addDiscipline(i->ID, i->name);
             }
         }
     }

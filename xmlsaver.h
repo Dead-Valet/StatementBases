@@ -17,6 +17,9 @@ public:
     MainWindow *w;
     void save(statFiles *file);
     void save(disFiles *file);
+    void load(statFiles *file);
+    void load(disFiles *file);
+
 };
 
 #endif // XMLSAVER_H

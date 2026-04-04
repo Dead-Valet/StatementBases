@@ -165,16 +165,16 @@ void MainWindow::switchAct() {
 
 void MainWindow::saveAct() {
     filename = QFileDialog::getOpenFileName();
-    xmlSaver *saver = new xmlSaver("testStorage.xml", this);
-    if (switchTable->text() == "Disciplines") {saver->save(sfile);}
-    if (switchTable->text() == "Statements") {saver->save(dfile);}
+    xmlSaver *saver = new xmlSaver(filename, this);
+    saver->save(sfile);
+    saver->save(dfile);
     delete saver;
 }
 
 void MainWindow::loadAct() {
     xmlSaver *saver = new xmlSaver("testStorage.xml", this);
-    if (switchTable->text() == "Disciplines") {saver->load(sfile);}
-    if (switchTable->text() == "Statements") {saver->load(dfile);}
+    saver->load(sfile);
+    saver->load(dfile);
     delete saver;
 }
 

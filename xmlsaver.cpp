@@ -6,15 +6,15 @@ xmlSaver::xmlSaver(QString _filename, MainWindow *win) : filename(_filename), w(
 void xmlSaver::save(disFiles *file) {
     file->save("presaver.txt", w);
     QFile f(filename);
-    if (!f.open(QIODevice::QIODevice::WriteOnly  | QIODevice::Text)) {return;}
+    if (!f.open(QIODevice::QIODevice::Append  | QIODevice::Text)) {return;}
     QTextStream out(&f);
-    out << "<table>\n";
+    out << "<disciplines>\n";
     foreach (Discipline *i, file->disciplines) {
         out << "    <tr>\n";
         out << "        <td>" << QString::number(i->ID) << "</td><td>" << i->name << "</td>\n";
         out << "    </tr>\n";
     }
-    out << "</table>";
+    out << "</disciplines>";
     f.close();
 
 }
@@ -23,14 +23,13 @@ void xmlSaver::save(statFiles *file) {
     QFile f(filename);
     if (!f.open(QIODevice::QIODevice::WriteOnly  | QIODevice::Text)) {return;}
     QTextStream out(&f);
-    out << "<table>\n";
-    out << "    </tableColumns>";
+    out << "<statements>\n";
     foreach (Statement *i, file->statements) {
         out << "    <tr>\n";
         out << "        <td>" << QString::number(i->ID) << "</td><td>" << i->discipline->name << "</td><td>" << QString::number(i->sem) << "</td><td>" << i->type << "</td><td>" << i->group << "</td><td>" << i->number << "</td><td>" << i->date << "</td><td>" << i->date2 << "</td><td>" << i->owner << "</td>\n";
         out << "    </tr>\n";
     }
-    out << "</table>";
+    out << "</statements>\n";
     f.close();
 }
 
@@ -39,6 +38,12 @@ void xmlSaver::load(disFiles *file) {
     if (!f.open(QIODevice::QIODevice::ReadOnly  | QIODevice::Text)) {return;}
     QTextStream in(&f);
     file->disciplines.clear();
+    while (!in.atEnd()) {
+        QString str = in.readLine();
+        if (str.contains("<disciplines>")) {
+            break;
+        }
+    }
     while (!in.atEnd()) {
         QString str = in.readLine();
         if (str.contains("<td>")) {
@@ -58,6 +63,9 @@ void xmlSaver::load(statFiles *file) {
     file->statements.clear();
     while (!in.atEnd()) {
         QString str = in.readLine();
+        if (str.contains("<disciplines>")) {
+            break;
+        }
         if (str.contains("<td>")) {
             QList<QString> line = str.split("</td><td>");
             int j;

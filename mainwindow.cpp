@@ -148,7 +148,20 @@ void MainWindow::switchAct() {
 // SAVE/LOAD
 
 void MainWindow::saveAct() {
-    filename = QFileDialog::getOpenFileName();
+    //filename = QFileDialog::getOpenFileName();
+    QString filename = QFileDialog::getSaveFileName(
+        this,
+        "Сохранить файл",
+        QDir::homePath(),
+        "Text Files (*.xml);;All Files (*)"
+        );
+
+    if (filename.isEmpty()) {
+        QMessageBox ms;
+        ms.setWindowTitle(QString());
+        ms.setText("Невозможно открыть файл");
+        ms.exec();
+    }
     xmlSaver *saver = new xmlSaver(filename, this);
     saver->save(sfile);
     saver->save(dfile);
@@ -156,7 +169,21 @@ void MainWindow::saveAct() {
 }
 
 void MainWindow::loadAct() {
-    filename = QFileDialog::getOpenFileName();
+
+    QString filename = QFileDialog::getOpenFileName(
+        this,
+        "Открыть файл",
+        QDir::homePath(),
+        "Text Files (*.xml);;All Files (*)"
+    );
+
+    if (filename.isEmpty()) {
+        QMessageBox ms;
+        ms.setWindowTitle(QString());
+        ms.setText("Невозможно открыть файл");
+        ms.exec();
+    }
+
     xmlSaver *saver = new xmlSaver(filename, this);
     saver->load(sfile);
     saver->load(dfile);

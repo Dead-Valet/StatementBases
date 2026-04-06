@@ -186,7 +186,7 @@ void StatWindow::on_plainTextEdit_textChanged()
 {
     if (QRegularExpression("^(\\s)*[А-ЯЁ]([а-яА-ЯёЁ])+(\\s+(([а-яА-ЯёЁ])+|\\d+))*(\\s)*$").match(ui->plainTextEdit->toPlainText()).hasMatch()) {
         foreach (Discipline *i, w->dbase->disciplines) {
-            if (i->name == ui->plainTextEdit->toPlainText().simplified() && ((i->ID != w->editedId) || (i->ID == 0))) {
+            if (i->name == ui->plainTextEdit->toPlainText().simplified()) {
                 ui->plainTextEdit->setProperty("Correct", true);
                 ui->plainTextEdit->setStyleSheet("background-color: rgb(255, 255, 255);");
                 return;

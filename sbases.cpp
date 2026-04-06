@@ -72,8 +72,18 @@ void sbases::editStatement(int _ID, Discipline *_discipline, int _sem, QString _
     query.bindValue(":who_passed", _owner);
     query.bindValue(":id", _ID);
 
-    if(!query.exec()) {
-        std::cout << query.lastError().text().toStdString() << std::endl;
+    foreach (Statement *i, statements) {
+        if (i->ID == _ID) {
+            i->discipline = _discipline;
+            i->sem = _sem;
+            i->type = _type;
+            i->group = _group;
+            i->number = _number;
+            i->date = _date;
+            i->date2 = _date2;
+            i->owner = _owner;
+            break;
+        }
     }
 
 }

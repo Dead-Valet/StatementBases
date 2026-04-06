@@ -106,6 +106,8 @@ void sbases::loadAll() {
     w->table->setRowCount(0);
     w->table->setRowCount(100);
     w->currentRow = -1;
+    w->sfile->statements.clear();
+    w->statements.clear();
 
     foreach (Statement *i, statements) {
         w->currentRow++;

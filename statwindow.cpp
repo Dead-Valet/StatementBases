@@ -233,7 +233,7 @@ void StatWindow::on_plainTextEdit_3_textChanged()
         ui->plainTextEdit_3->setStyleSheet("background-color: rgb(255, 255, 255);");
         return;
     }
-    if (std::regex_match(data, std::regex("^(Зачет)|(Экзамен)$"))) {
+    if (types.contains(ui->plainTextEdit_3->toPlainText().simplified())) {
         ui->plainTextEdit_3->setProperty("Correct", true);
         ui->plainTextEdit_3->setStyleSheet("background-color: rgb(255, 255, 255);");
         return;

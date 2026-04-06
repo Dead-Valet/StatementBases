@@ -34,6 +34,7 @@ public:
     QString mode = "None";
     MainWindow *w;
     Ui::StatWindow *ui;
+    QList<QString> types = {"Зачет", "Экзамен", "Дифференцированный зачет", "Курсовая работа"};
 
 signals:
 

@@ -238,6 +238,7 @@ void MainWindow::findAct() {
             table->setRowCount(0);
             table->setRowCount(100);
             currentRow = -1;
+            sfile->getStatList(statements);
             foreach (Statement *i, statements) {
                 currentRow++;
                 table->setItem(currentRow, 0, new QTableWidgetItem(QString::number(i->ID)));
@@ -256,6 +257,7 @@ void MainWindow::findAct() {
             tableDis->setRowCount(0);
             tableDis->setRowCount(100);
             currentRowDis = -1;
+            dfile->getDisList(disciplines);
             foreach (Discipline *i, disciplines) {
                 currentRowDis++;
                 tableDis->setItem(currentRowDis, 0, new QTableWidgetItem(QString::number(i->ID)));
@@ -334,6 +336,7 @@ void MainWindow::on_ok_clicked()
         table->setRowCount(0);
         table->setRowCount(100);
         currentRow = -1;
+        sfile->statements.clear();
         foreach (Statement *i, sbase->statements) {
             if (sbase->line(i).contains(findstats)) {
                 currentRow++;
@@ -357,6 +360,7 @@ void MainWindow::on_ok_clicked()
         tableDis->setRowCount(0);
         tableDis->setRowCount(100);
         currentRowDis = -1;
+        dfile->disciplines.clear();
         foreach (Discipline *i, dbase->disciplines) {
             if (dbase->line(i).contains(finddis)) {
                 currentRowDis++;

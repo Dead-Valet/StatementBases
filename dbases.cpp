@@ -56,6 +56,8 @@ void dbases::loadAll() {
     w->tableDis->setRowCount(0);
     w->tableDis->setRowCount(100);
     w->currentRowDis = -1;
+    w->dfile->disciplines.clear();
+    w->disciplines.clear();
 
     foreach (Discipline *i, disciplines) {
         w->currentRowDis++;

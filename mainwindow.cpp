@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent, database_window *db)
         dbase->getDisList();
     });
 
-    connect(db, &database_window::OPENED,this, [this]() {
+    connect(db, &database_window::OPENED, this, [this]() {
         sbase->getStatList();
     });
 
@@ -89,6 +89,22 @@ MainWindow::MainWindow(QWidget *parent, database_window *db)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete statWid;
+    delete disWid;
+    delete dfile;
+    delete sfile;
+    delete save;
+    delete load;
+    delete loadall;
+    delete addDiscipline;
+    delete addStatement;
+    delete findStatement;
+    delete switchTable;
+    delete shortcut;
+    delete stateShortcut;
+    delete disShortcut;
+    delete findShortcut;
+
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
@@ -326,7 +342,6 @@ void MainWindow::on_ok_2_clicked()
 {
     findAct();
 }
-
 
 void MainWindow::on_ok_clicked()
 {
